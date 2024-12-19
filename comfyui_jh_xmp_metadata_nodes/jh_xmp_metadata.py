@@ -75,7 +75,7 @@ class JHXMPMetadata:
         "Iptc4xmpCore": "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._creator: str | None = None
         self._title: str | None = None
         self._description: str | None = None
@@ -84,7 +84,8 @@ class JHXMPMetadata:
         self._comment: str | None = None
         self._alt_text: str | None = None
 
-        # Set up the empty XMP metadata tree. We will add (and remove) elements as needed.
+        # Set up the empty XMP metadata tree. We will add (and remove) elements
+        # as needed.
         self._xmpmetadata = etree.Element(
             "{adobe:ns:meta/}xmpmeta", nsmap=self.NAMESPACES
         )
@@ -288,7 +289,7 @@ class JHXMPMetadata:
         ).decode("utf-8")
 
     def to_wrapped_string(self) -> str:
-        return f"""<?xpacket begin="\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>{self.to_string()}<?xpacket end="w"?>"""  # pylint: disable=line-too-long
+        return f"""<?xpacket begin="\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>{self.to_string()}<?xpacket end="w"?>"""  # noqa: E501
 
     @classmethod
     def from_string(cls, xml_string: str) -> "JHXMPMetadata":

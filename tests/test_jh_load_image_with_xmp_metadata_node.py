@@ -51,7 +51,7 @@ def valid_xml_string() -> str:
             </rdf:Description>
         </rdf:RDF>
     </x:xmpmeta>
-    """
+    """  # noqa: E501
 
 
 @pytest.fixture

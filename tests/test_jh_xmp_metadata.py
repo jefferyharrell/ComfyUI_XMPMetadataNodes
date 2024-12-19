@@ -80,17 +80,17 @@ def test_to_string_from_empty(metadata: JHXMPMetadata) -> None:
 )
 def test_field_setter_getter(
     metadata: JHXMPMetadata, example_metadata: dict[str, str], field_name: str
-):
+) -> None:
     setattr(metadata, field_name, example_metadata[field_name])
     assert getattr(metadata, field_name) == example_metadata[field_name]
     setattr(metadata, field_name, None)
     assert getattr(metadata, field_name) is None
 
 
-def validate_xml_against_metadata(xml: str, populated_metadata: JHXMPMetadata):
+def validate_xml_against_metadata(xml: str, populated_metadata: JHXMPMetadata) -> None:
     root = etree.fromstring(xml, parser=etree.XMLParser(recover=True))
 
-    def validate_field(xpath: str, expected_value: str | None, field_name: str):
+    def validate_field(xpath: str, expected_value: str | None, field_name: str) -> None:
         elements = root.xpath(xpath, namespaces=JHXMPMetadata.NAMESPACES)
         if expected_value is None:
             assert not elements, f"{field_name} should not be in XML"
@@ -126,17 +126,17 @@ def validate_xml_against_metadata(xml: str, populated_metadata: JHXMPMetadata):
     )
 
 
-def test_to_string(populated_metadata: JHXMPMetadata):
+def test_to_string(populated_metadata: JHXMPMetadata) -> None:
     validate_xml_against_metadata(populated_metadata.to_string(), populated_metadata)
 
 
-def test_to_wrapped_string(populated_metadata: JHXMPMetadata):
+def test_to_wrapped_string(populated_metadata: JHXMPMetadata) -> None:
     validate_xml_against_metadata(
         populated_metadata.to_wrapped_string(), populated_metadata
     )
 
 
-def test_from_string(populated_metadata: JHXMPMetadata):
+def test_from_string(populated_metadata: JHXMPMetadata) -> None:
     xml_string = populated_metadata.to_string()
     parsed_metadata = JHXMPMetadata.from_string(xml_string)
     assert parsed_metadata.creator == populated_metadata.creator
@@ -148,7 +148,7 @@ def test_from_string(populated_metadata: JHXMPMetadata):
     assert parsed_metadata.alt_text == populated_metadata.alt_text
 
 
-def test_from_string_with_garbage_data():
+def test_from_string_with_garbage_data() -> None:
     garbage_data = """
     <x:xmpmeta xmlns:x="adobe:ns:meta/" xmlns:dc="http://purl.org/dc/elements/1.1/">
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -172,7 +172,7 @@ def test_from_string_with_garbage_data():
     assert parsed_metadata.alt_text is None
 
 
-def test_from_string_with_missing_fields():
+def test_from_string_with_missing_fields() -> None:
     xml_string = """
     <x:xmpmeta xmlns:x="adobe:ns:meta/" xmlns:dc="http://purl.org/dc/elements/1.1/">
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -196,7 +196,7 @@ def test_from_string_with_missing_fields():
     assert parsed_metadata.alt_text is None
 
 
-def test_large_metadata_values():
+def test_large_metadata_values() -> None:
     large_string = "A" * 10000
     metadata = JHXMPMetadata()
     metadata.title = large_string
@@ -205,7 +205,7 @@ def test_large_metadata_values():
     assert parsed_metadata.title == large_string
 
 
-def test_empty_xml_string():
+def test_empty_xml_string() -> None:
     empty_xml = ""
     parsed_metadata = JHXMPMetadata.from_string(empty_xml)
     assert parsed_metadata.title is None
@@ -219,7 +219,7 @@ def test_empty_xml_string():
 
 def test_special_characters_in_xml(
     metadata: JHXMPMetadata, example_metadata_with_unicode: dict[str, str]
-):
+) -> None:
     for key, value in example_metadata_with_unicode.items():
         setattr(metadata, key, value)
     xml_string = metadata.to_string()
